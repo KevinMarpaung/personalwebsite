@@ -77,7 +77,6 @@ const SkillsSection = () => {
                   whileHover={{ rotate: 5, scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  {/* Render the icon as a component with proper props */}
                   <category.icon className="h-5 w-5" />
                 </motion.div>
                 <h3 className="text-lg font-semibold">{category.name}</h3>

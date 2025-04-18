@@ -9,6 +9,7 @@ const AchievementsSection = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
@@ -27,23 +28,19 @@ const AchievementsSection = () => {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return;
-
     setIsDragging(true);
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
-
     document.body.style.cursor = "grabbing";
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
-
     document.body.style.cursor = "default";
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !scrollContainerRef.current) return;
-
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
     const walk = (x - startX) * 2;
     scrollContainerRef.current.scrollLeft = scrollLeft - walk;
@@ -67,8 +64,8 @@ const AchievementsSection = () => {
         >
           <h2 className="section-heading">Achievements</h2>
           <p className="text-muted-foreground max-w-2xl mb-12">
-            A collection of my professional accomplishments, awards, and
-            certifications earned throughout my journey.
+            I worked with a range of technologies in the web development world,
+            from frontend to backend and everything in between.
           </p>
         </motion.div>
 
@@ -102,7 +99,7 @@ const AchievementsSection = () => {
 
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto pb-6 space-x-6 snap-x scrollbar-hidden cursor-grab"
+          className="flex overflow-x-auto pb-6 space-x-6 snap-x scrollbar-hidden cursor-grab "
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
@@ -122,42 +119,51 @@ const AchievementsSection = () => {
                 transition: { duration: 0.2 },
               }}
             >
-              <div className="flex items-center mb-4">
-                <div
-                  className={`p-2 rounded-full mr-3 ${
-                    achievement.type === "competition"
-                      ? "bg-yellow-100/80 text-yellow-600 dark:bg-yellow-950 dark:text-yellow-300"
-                      : achievement.type === "academic"
-                      ? "bg-blue-100/80 text-blue-600 dark:bg-blue-950 dark:text-blue-300"
-                      : "bg-green-100/80 text-green-600 dark:bg-green-950 dark:text-green-300"
-                  }`}
-                >
+              <div className="flex items-center mb-4 h-20">
+                <div className="p-2 rounded-full mr-3 bg-muted text-muted-foreground ">
                   <achievement.icon className="h-5 w-5" />
                 </div>
-                <div>
-                  <p className="text-sm font-normal text-muted-foreground">
-                    {achievement.year}
+                <div className=" ">
+                  <p className="text-sm font-normal text-muted-foreground ">
+                    {achievement.issuer}
                   </p>
-                  <h3 className="text-lg font-semibold text-foreground">
+                  <h3 className="text-lg font-semibold text-foreground flex  ">
                     {achievement.title}
                   </h3>
                 </div>
               </div>
-              <p className="text-base font-normal text-muted-foreground mb-4">
+              <p
+                className={`text-base font-normal text-muted-foreground mb-4 ${
+                  expandedId === achievement.id ? "" : "truncate"
+                } cursor-pointer`}
+                onClick={() =>
+                  setExpandedId(
+                    expandedId === achievement.id ? null : achievement.id
+                  )
+                }
+              >
                 {achievement.description}
               </p>
-              <span
-                className={`text-xs px-2 py-1 rounded-full ${
-                  achievement.type === "competition"
-                    ? "bg-yellow-100/80 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300"
-                    : achievement.type === "academic"
-                    ? "bg-blue-100/80 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
-                    : "bg-green-100/80 text-green-800 dark:bg-green-950 dark:text-green-300"
-                }`}
-              >
-                {achievement.type.charAt(0).toUpperCase() +
-                  achievement.type.slice(1)}
-              </span>
+              {achievement.certificateImage && (
+                <div className="mb-4">
+                  <img
+                    src={achievement.certificateImage}
+                    alt="Certificate"
+                    className="w-full h-auto rounded-lg"
+                  />
+                </div>
+              )}
+              {achievement.certificateUrl && (
+                <Button asChild className="mt-2 flex" variant="default">
+                  <a
+                    href={achievement.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Certificate
+                  </a>
+                </Button>
+              )}
             </motion.div>
           ))}
         </div>
