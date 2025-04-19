@@ -159,16 +159,16 @@ const AboutSection = () => {
               variants={itemVariants}
               whileHover={{ scale: 1.05 }}
             >
-              <Avatar className="w-40 h-40 border-4 border-primary/20">
+              <Avatar className="w-40 h-40 border-4  border-primary/20">
                 <AvatarImage
-                  src="/imgs/me.png"
+                  src="/imgs/fotoprofil.jpeg"
                   alt="kevin marpaung"
                   loading="lazy"
                 />
                 <AvatarFallback>AZ</AvatarFallback>
               </Avatar>
               <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                3.41 GPA
+                😏
               </div>
             </motion.div>
 

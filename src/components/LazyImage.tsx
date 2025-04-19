@@ -21,14 +21,14 @@ const LazyImage = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className={cn("overflow-hidden", wrapperClassName)}>
+    <div className={cn("overflow-hidden  ", wrapperClassName)}>
       <LazyLoadImage
         src={src}
         alt={alt}
         effect="blur"
         afterLoad={() => setIsLoaded(true)}
         className={cn(
-          "transition-all duration-500",
+          "transition-all duration-500 ",
           isLoaded ? "scale-100 blur-0" : "scale-105 blur-sm",
           imgClassName
         )}

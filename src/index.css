@@ -4,6 +4,24 @@
 @fontsource /inter/variable.css;
 @fontsource /roboto-mono;
 
+/* src/index.css atau globals.css */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.5); /* slate-500/50 */
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 @layer base {
   :root,
   .theme-blue {

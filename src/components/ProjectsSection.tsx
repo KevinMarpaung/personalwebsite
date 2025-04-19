@@ -2,10 +2,18 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, Code, ExternalLink, Github } from "lucide-react";
 import { projects } from "@/data/projects";
-import LazyImage from "@/components/LazyImage"; // Import our LazyImage component
+import LazyImage from "@/components/LazyImage";
 
 const ProjectsSection = () => {
   const [visibleProjects, setVisibleProjects] = useState(3);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+
+  const toggleDescription = (projectId) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [projectId]: !prev[projectId],
+    }));
+  };
 
   const showMoreProjects = () => {
     setVisibleProjects(projects.length);
@@ -28,15 +36,14 @@ const ProjectsSection = () => {
           {projects.slice(0, visibleProjects).map((project, index) => (
             <div
               key={project.id}
-              className="bg-card rounded-lg overflow-hidden shadow-sm border border-border card-hover"
+              className="bg-card h-full rounded-lg overflow-hidden shadow-sm border border-border card-hover"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="h-48 bg-muted relative overflow-hidden">
-                {/* Replace img with LazyImage */}
+              <div className="bg-muted relative overflow-hidden">
                 <LazyImage
                   src={project.image}
                   alt={project.title}
-                  imgClassName="w-full h-48 object-cover"
+                  imgClassName="object-cover"
                 />
                 <div className="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                   <div className="flex space-x-4">
@@ -65,13 +72,26 @@ const ProjectsSection = () => {
                   </div>
                 </div>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 border h-72 justify-between flex flex-col">
                 <h3 className="text-xl font-bold text-foreground">
                   {project.title}
                 </h3>
-                <p className="text-muted-foreground text-sm">
-                  {project.description}
-                </p>
+
+                {/* Description toggle on click */}
+                <div
+                  className={`text-muted-foreground text-sm cursor-pointer transition-all duration-300 ${
+                    expandedDescriptions[project.id]
+                      ? "max-h-32 overflow-y-auto pr-1"
+                      : "max-h-[3.5rem] overflow-hidden"
+                  }`}
+                  onClick={() => toggleDescription(project.id)}
+                >
+                  {expandedDescriptions[project.id]
+                    ? project.description
+                    : project.description.split(" ").slice(0, 10).join(" ") +
+                      (project.description.split(" ").length > 10 ? "..." : "")}
+                </div>
+
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <span
@@ -82,6 +102,7 @@ const ProjectsSection = () => {
                     </span>
                   ))}
                 </div>
+
                 <div className="flex gap-3 pt-2">
                   {project.links.github && (
                     <Button
